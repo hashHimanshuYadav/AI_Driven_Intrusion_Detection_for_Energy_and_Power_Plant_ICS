@@ -51,6 +51,7 @@ Since physical SCADA networks are air-gapped and difficult to access for testing
 ## 📂 Repository Structure
 
 .
+
 ├── AI-Driven_Intrusion_Detection.ipynb   # Full training pipeline, data preprocessing, and visual analytics
 
 ├── stream_generator.py                   # Generates live multi-class telemetry packets
