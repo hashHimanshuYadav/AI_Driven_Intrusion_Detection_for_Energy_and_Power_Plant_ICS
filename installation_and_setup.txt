@@ -1,0 +1,109 @@
+================================================================================
+          AI-DRIVEN INTRUSION DETECTION SYSTEM - INSTALLATION & SETUP          
+================================================================================
+
+PREREQUISITES:
+- Python 3.8 or higher installed on your system.
+- Git installed.
+- A Kaggle account (to download the dataset for training).
+
+--------------------------------------------------------------------------------
+STEP 1: CLONE THE REPOSITORY
+--------------------------------------------------------------------------------
+Open your terminal or command prompt and run:
+
+    git clone https://github.com/your-username/AI-IDS-PowerPlant.git
+    cd AI-IDS-PowerPlant
+
+--------------------------------------------------------------------------------
+STEP 2: CREATE A VIRTUAL ENVIRONMENT (RECOMMENDED)
+--------------------------------------------------------------------------------
+To prevent library conflicts, create an isolated environment:
+
+    Windows:
+    python -m venv venv
+    venv\Scripts\activate
+
+    macOS/Linux:
+    python3 -m venv venv
+    source venv/bin/activate
+
+--------------------------------------------------------------------------------
+STEP 3: INSTALL DEPENDENCIES
+--------------------------------------------------------------------------------
+Install the required machine learning and data processing libraries:
+
+    pip install pandas numpy scikit-learn tensorflow matplotlib seaborn python-dotenv kaggle joblib
+
+--------------------------------------------------------------------------------
+STEP 4: CONFIGURE KAGGLE API & TRAIN MODELS
+--------------------------------------------------------------------------------
+1. Get your Kaggle API token (kaggle.json) from Kaggle Account Settings.
+2. Create a file named '.env' in the project folder and add your key:
+   
+   KAGGLE_API_TOKEN="your_copied_key_here"
+
+3. Open and run 'AI-Driven_Intrusion_Detection.ipynb' to train the AI models.
+   This will create the required `.pkl` and `.keras` model files in your directory.
+
+================================================================================
+                       EXECUTION ENVIRONMENTS
+================================================================================
+
+--------------------------------------------------------------------------------
+OPTION A: RUN IN SIMULATION MODE (USING FAKE DATA STREAM)
+--------------------------------------------------------------------------------
+Use this method for testing, demonstration, and academic evaluation without 
+needing access to a physical power plant network.
+
+1. START THE FAKE TELEMETRY GENERATOR:
+   Open a terminal and run the stream simulator (this writes to live_stream.json):
+   
+    python3 stream_generator.py
+
+2. START THE INTRUSION DETECTION ENGINE:
+   Open a second, separate terminal window and run:
+   
+    python3 detect.py
+
+   The detector will read from live_stream.json and output real-time alerts.
+
+--------------------------------------------------------------------------------
+OPTION B: RUN IN PRODUCTION MODE (REAL(LAB) ICS/OT SYSTEM)
+--------------------------------------------------------------------------------
+Use this method if deploying on a physical edge gateway, substation switch, 
+or Raspberry Pi connected to real industrial PLCs.
+
+1. STOP THE GENERATOR:
+   Do not run 'stream_generator.py'. You will not use 'live_stream.json'.
+
+2. INSTALL NETWORK SNIFFING LIBRARIES:
+   Install packet capture tools:
+   
+    pip install scapy
+
+3. MODIFY DETECT.PY FOR LIVE TRAFFIC:
+   Open 'detect.py' and replace the JSON file-reading loop with a live network 
+   sniffer. Example logic:
+
+    from scapy.all import sniff
+    
+    def process_live_packet(packet):
+        # 1. Extract physical features (payload size, protocol, Modbus values)
+        raw_features = extract_features(packet) 
+        
+        # 2. Pass to AI Model
+        alert, rf_score, iso_flag, lstm_score = analyze_packet(raw_features)
+        
+        # 3. Trigger physical breaker or HMI alert if alert == True
+    
+    # Listen directly on the network interface (e.g., eth0)
+    sniff(iface="eth0", prn=process_live_packet, store=False)
+
+4. RUN THE PRODUCTION IDS:
+   Run the modified detector script with administrator/root privileges (required 
+   for packet sniffing):
+   
+    sudo python3 detect.py
+
+================================================================================
