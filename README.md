@@ -52,13 +52,23 @@ Since physical SCADA networks are air-gapped and difficult to access for testing
 
 .
 ├── AI-Driven_Intrusion_Detection.ipynb   # Full training pipeline, data preprocessing, and visual analytics
+
 ├── stream_generator.py                   # Generates live multi-class telemetry packets
+
 ├── detect.py                             # Real-time IDS inference engine
+
 ├── more files could be added in the future --
+
 ├── .env                                  # (Git-ignored) Stores Kaggle API token
+
 ├── .gitignore                            # Prevents credential and large binary leakage
+
 └── Saved_Models/                         # (Generated locally during runtime)
+    
     ├── rf_powerplant_ids.pkl             # Serialized Random Forest
+    
     ├── iso_powerplant_ids.pkl            # Serialized Isolation Forest
+    
     ├── scaler_powerplant_ids.pkl         # Fitted StandardScaler
+    
     └── lstm_powerplant_ids.keras         # Saved Deep Learning model
